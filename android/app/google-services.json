@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1080288746908",
+    "firebase_url": "https://healer-fit-1.firebaseio.com",
+    "project_id": "healer-fit-1",
+    "storage_bucket": "healer-fit-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080288746908:android:891e1a97df14f8a6253c59",
+        "android_client_info": {
+          "package_name": "com.tansokalzi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1080288746908-s6aq7pkjf9ti7aq8463sda7tq81d0n7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE8sy3zpaBK_95Z1Gsvw56LiNuPczYFho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1080288746908-s6aq7pkjf9ti7aq8463sda7tq81d0n7f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1080288746908-eodsh1bdhp48rvvn6ia7064im000eem9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tanso.kalzi",
+                "app_store_id": "1542165327"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
