@@ -464,7 +464,7 @@ class home extends Component {
                       <Text style={styles.text}>Hey, </Text>
                       <Text style={styles.username}>{this.props.user.user.name} </Text>
                     </View>
-                    {this.props.user.user.photoUrl !== '' && <ImageIcon source={{ uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35} />}
+                    {this.props.user.user.photoUrl !== '' && <ImageIcon source={require('./notification.png')} /*{{ uri: this.props.user.user.photoUrl }}*/ height={70} width={70} borderRadius={35} onPress={() => this.props.navigation.navigate('Profile')} />}
                   </View>
                   {/* <View style={{ alignItems: 'center' }} >
                     <Carousel
@@ -500,7 +500,8 @@ class home extends Component {
                       <Text style={styles.text}>Hey, </Text>
                       <Text style={styles.username}>{this.props.user.user.name} </Text>
                     </View>
-                    <ImageIcon source={{ uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35} />
+                    <ImageIcon source={/*require('./notification.png')}*/ { uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35} 
+                              onPress={() => { this.props.navigation.navigate('Profile') }} />
                   </View>
                   <View style={{ alignItems: 'center' }} >
                   </View>
