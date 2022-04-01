@@ -10,8 +10,7 @@ import {
   Image,
   Linking,
   TouchableOpacity,
-  Alert,
-  Switch
+  Alert
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -36,8 +35,7 @@ class Login extends Component {
       errorTitle: '',
       errorMessage: '',
       errorModalVisible: false,
-      loading: false,
-      rememberMe: true
+      loading: false
     };
   }
 
@@ -48,7 +46,6 @@ class Login extends Component {
   logIn = () => {
 
     if (this.state.email !== '' && this.state.password !== '') {
-      this.rememberUser();
 
       this.setState({loading: true})
 
@@ -87,58 +84,13 @@ class Login extends Component {
 
   async componentDidMount() {
 
-    const username = await this.getRememberedUser();
-    this.setState({ 
-      email: username || "", 
-      rememberMe: username ? true : false 
-    });
-
-    // try {
-    //   await persistor.purge()
-    // } catch (error) {
+    try {
+      await persistor.purge()
+    } catch (error) {
       
-    // }
+    }
 
   }
-
-  toggleRememberMe = value => {
-    this.setState({ rememberMe: value })
-    if (value === true) {
-      // user wants to be remembered.
-      this.rememberUser();
-    } else {
-      this.forgetUser();
-    }
-  }
-
-  rememberUser = async () => {
-    try {
-      await AsyncStorage.setItem('credentials', this.state.email);
-    } catch (error) {
-      // Error saving data
-    }
-  };
-  
-  getRememberedUser = async () => {
-    try {
-      const username = await AsyncStorage.getItem('credentials');
-      if (username !== null) {
-        // We have username!!
-        return username;
-      }
-    } catch (error) {
-      // Error retrieving data
-      return '';
-    }
-  };
-  
-  forgetUser = async () => {
-    try {
-      await AsyncStorage.removeItem('credentials');
-    } catch (error) {
-      // Error removing
-    }
-  };
 
   render() {
     return (
@@ -165,7 +117,6 @@ class Login extends Component {
             {/* Username TextInput*/}
             <TextInputField
               placeholder="Email"
-              value = {this.getRememberedUser()}
               onChangeText={(val) => this.onChangeText('email', val)}
               error={this.state.errorInUsername}
               errorBorder={this.state.errorInUsername}
@@ -181,20 +132,6 @@ class Login extends Component {
               errorMessage="Incorrect Password"
               iconAvailable={true}
             />
-          
-            {/* Remember Me toggle switch*/}
-            {/* <View style={{ marginBottom: 15, flexDirection: 'row', marginHorizontal: 10, paddingHorizontal: 25, paddingVertical: 10, borderRadius: 20, }}>
-              <View style={{ marginLeft: 10, justifyContent: 'space-between', flex: 1, alignItems: 'center', flexDirection: 'row' }} >
-                <Text style={{ color: Colors.textPlaceholder, fontSize: 15, alignSelf: 'center' }}>Remember Me</Text>
-                <Switch  
-                  trackColor={{ false: "#767577", true: Colors.gradientRight }}
-                  thumbColor={this.state.smoke ? Colors.gradientLeft : "#f4f3f4"}
-                  ios_backgroundColor="#3e3e3e" 
-                  onValueChange={(value) => this.toggleRememberMe(value)}
-                  value={this.state.rememberMe} 
-                />
-              </View>
-            </View> */}
 
             {/* Forgot Password Button */}
             {/* <Text
