@@ -134,11 +134,11 @@ class Login extends Component {
             />
 
             {/* Forgot Password Button */}
-            {/* <Text
+            <Text
               style={styles.forgotPassword}
               onPress={() => this.props.navigation.navigate('ForgotPassword')}>
               Forgot Password?
-            </Text> */}
+            </Text>
 
             {/* LOGIN Button */}
             <GradientButton

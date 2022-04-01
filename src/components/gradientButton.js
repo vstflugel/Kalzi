@@ -3,6 +3,7 @@ import { Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import { Colors } from './colors';
+
 export default class gradientButton extends Component {
   render() {
     if (this.props.border === undefined) {
@@ -11,7 +12,7 @@ export default class gradientButton extends Component {
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={[Colors.gradientLeft, Colors.gradientRight]}
+          colors={this.props.colors || [Colors.gradientLeft, Colors.gradientRight] }
           style={[
             {
               height: this.props.height,

@@ -500,7 +500,7 @@ class home extends Component {
                       <Text style={styles.text}>Hey, </Text>
                       <Text style={styles.username}>{this.props.user.user.name} </Text>
                     </View>
-                    <ImageIcon source={{ uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35}  onPress={this.props.navigation.navigate('Notifications')}/>
+                    <ImageIcon source={{ uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35} />
                   </View>
                   <View style={{ alignItems: 'center' }} >
                   </View>
@@ -561,7 +561,6 @@ class home extends Component {
                             </TouchableOpacity>
                           }
                         </View>
-                        
                         {!this.props.user.user.isTrainer && expiry &&
                           <TouchableOpacity
                             onPress={async () => {

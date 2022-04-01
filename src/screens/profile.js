@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
+//import { LineChart , Line, CartesianGrid, XAxis , YAxis , Tooltip, ResponsiveContainer, Legend} from 'recharts';
+//import { LineChart, Line, YAxis, XAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
+
 import {
   View, Text, StyleSheet, ScrollView, Dimensions, Switch,
-  TextInput, SafeAreaView, Alert,
+  TextInput, SafeAreaView, Alert
 } from 'react-native';
 import { Colors } from '../components/colors';
 import ImageIcon from '../components/imageIcon';
@@ -18,14 +29,56 @@ import storage from '@react-native-firebase/storage'
 import Toast from 'react-native-simple-toast';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import {  Picker} from "react-native";
+import signUp from './signUp';
+import weightScreen from './weightLog';
+
 
 import { connect } from 'react-redux'
 
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 
+
+const user_info = [{
+  Date: 'Nov',
+  Weight: 100,
+  BMI: 29.9
+},{
+  Date: 'Dec',
+  Weight: 95,
+  BMI: 28.4
+},{
+  Date: 'Jan',
+  Weight: 94,
+  BMI: 28.1
+},{
+  Date: 'Feb',
+  Weight: 95,
+  BMI: 28.4
+},{
+  Date: 'Mar',
+  Weight: 96,
+  BMI: 28.7
+}];
+
+const data={
+  labels: ["Nov", "Dec", "Jan", "Feb", "Mar","Nov", "Dec", "Jan", "Feb", "Mar", "Nov", "Dec", "Jan", "Feb", "Mar","Nov", "Dec", "Jan", "Feb", "Mar"],
+  datasets: [
+    {
+      data: [
+        100, 95, 94, 95, 96,100, 95, 94, 95, 96,100, 95, 94, 95, 96,100, 95, 94, 95, 96
+      ]
+    }
+  ]
+};
+
+
+
 class home extends Component {
+
+
+  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -47,6 +100,16 @@ class home extends Component {
       photoUrl: this.props.user.user.photoUrl,
       exitPopup: false
     };
+  }
+
+  AuthStackScreen = () => {
+    return ( 
+      <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+        
+        <AuthStack.Screen name="SignUp" component={signUp} />
+        
+      </AuthStack.Navigator>
+    )
   }
 
   componentDidMount() {
@@ -235,6 +298,7 @@ class home extends Component {
             }}
             onPress={() => this.props.navigation.goBack()}
           />
+
           <View>
             <View style={{ marginBottom: 10, flexDirection: 'row', marginHorizontal: 10, backgroundColor: 'black', paddingHorizontal: 10, paddingVertical: 10, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 20, }}>
               <View style={{ alignSelf: 'center' }}>
@@ -324,6 +388,23 @@ class home extends Component {
               style={{ position: 'absolute', top: 7, right: 10 }}
             />
           </View>
+          
+          {/* Graph API starts Here */}
+          <View style={{  marginBottom: 30, marginLeft: 12  }} >
+            <GradientButton
+              height={40}
+              width={screenWidth * 0.43}
+              borderRadius={15}
+              text='View weight log'
+              
+              //onPress={() => this.props.navigation.navigate('Chat')}
+              onPress={() => this.props.navigation.navigate('weightLog')}
+
+            />
+          </View>
+          <Text style={{ color: Colors.white, marginBottom: 20, fontWeight: 'bold', fontSize: 18, alignSelf: 'flex-start', paddingHorizontal: 10 }}>Your Current BMI: {user_info[user_info.length-1].BMI}</Text>
+          {/* Graph API ends Here */}
+
           <Text style={{ color: Colors.white, marginBottom: 20, fontWeight: 'bold', fontSize: 25, alignSelf: 'flex-start', paddingHorizontal: 10 }}>Health Data</Text>
           <View style={{ marginBottom: 15, flexDirection: 'row', marginHorizontal: 10, backgroundColor: Colors.boxBackground, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, }}>
             <View style={{ marginLeft: 10, justifyContent: 'space-between', flex: 1, alignItems: 'center', flexDirection: 'row' }} >
@@ -353,7 +434,7 @@ class home extends Component {
           <View style={{ marginBottom: 25, flexDirection: 'row', marginHorizontal: 10, backgroundColor: Colors.boxBackground, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, }}>
             <View style={{ marginLeft: 10, justifyContent: 'space-between', flex: 1, alignItems: 'center', flexDirection: 'row' }} >
               <Text style={{ color: Colors.textPlaceholder, fontWeight: 'bold', fontSize: 20, alignSelf: 'center', }}>Activity</Text>
-              {/* <TextInput
+              <TextInput
                 defaultValue={this.state.activity}
                 placeholder='How active are you?'
                 placeholderTextColor={Colors.textPlaceholder}
@@ -361,20 +442,20 @@ class home extends Component {
                 textAlign='center'
                 // value={this.state.activity}
                 style={{ color: Colors.white }}
-              /> */}
-              <Picker
+              />
+              {/* <Picker
               dropdownIconColor={Colors.white}
               mode='dropdown'
-              itemStyle={{color: Colors.white}}
-              style={{color: Colors.white , borderColor: 'black', borderWidth: 1 , flex:1 , borderRadius: 5}}
+              // itemStyle={{color: Colors.white}}
+              style={{color: Colors.white , borderColor: 'red', borderWidth: 1 , flex:1 , borderRadius: 5}}
               selectedValue={'sedentary'}
               onValueChange={(itemValue, itemIndex) =>
                 this.setState({activity: itemValue})
               }>
-              <Picker.Item color={Colors.backgroundColor} label="                Sedentary" value="sedentary" />
-              <Picker.Item  color={Colors.backgroundColor}label="                   Active" value="Active" />
-              <Picker.Item color={Colors.backgroundColor} label="              Very active" value="Very active" />
-            </Picker>
+              <Picker.Item color={Colors.white} label="Sedentary" value="sedentary" />
+              <Picker.Item  color={Colors.white}label="Somewhat" value="somewhat" />
+              <Picker.Item color={Colors.white} label="Very active" value="very active" />
+            </Picker> */}
             </View>
           </View>
 
@@ -424,6 +505,91 @@ class home extends Component {
       // </SafeAreaView>
     );
   }
+
+  // static user_info = [{
+  //   Date: 'Nov',
+  //   Weight: 100,
+  //   BMI: 29.9
+  // },{
+  //   Date: 'Dec',
+  //   Weight: 95,
+  //   BMI: 28.4
+  // },{
+  //   Date: 'Jan',
+  //   Weight: 94,
+  //   BMI: 28.1
+  // },{
+  //   Date: 'Feb',
+  //   Weight: 95,
+  //   BMI: 28.4
+  // },{
+  //   Date: 'Mar',
+  //   Weight: 96,
+  //   BMI: 28.7
+  // }];
+  /*static pdata = [
+    {
+        name: 'MongoDb',
+        student: 11,
+        fees: 120
+    },
+    {
+        name: 'Javascript',
+        student: 15,
+        fees: 12
+    },
+    {
+        name: 'PHP',
+        student: 5,
+        fees: 10
+    },
+    {
+        name: 'Java',
+        student: 10,
+        fees: 5
+    },
+    {
+        name: 'C#',
+        student: 9,
+        fees: 4
+    },
+    {
+        name: 'C++',
+        student: 10,
+        fees: 8
+    },
+];
+
+data = [
+  {
+      "name": "Jan 2019",
+      "Product A": 3432,
+      "Procuct B": 2342
+  },
+  {
+      "name": "Feb 2019",
+      "Product A": 2342,
+      "Procuct B": 3246
+  },
+  {
+      "name": "Mar 2019",
+      "Product A": 4565,
+      "Procuct B": 4556
+  },
+  {
+      "name": "Apr 2019",
+      "Product A": 6654,
+      "Procuct B": 4465
+  },
+  {
+      "name": "May 2019",
+      "Product A": 8765,
+      "Procuct B": 4553
+  }
+]*/
+
+
+
 }
 
 const mapStateToProps = state => {
