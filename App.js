@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, {Component} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import NavigationSvg from './src/components/navigationSvg';
-import { Colors } from './src/components/colors';
+import {Colors} from './src/components/colors';
 // import SplashScreen from "react-native-splash-screen";
 
 import homeScreen from './src/screens/homeStack/home';
@@ -12,28 +12,29 @@ import chatScreen from './src/screens/chat';
 import noChatScreen from './src/screens/noChat';
 import profileScreen from './src/screens/profile';
 import viewParticipants from './src/screens/viewParticipants';
+import notifications from './src/screens/notifications';
 import LoadAuth from './src/screens/loadAuth';
 import login from './src/screens/login';
 import signUp from './src/screens/signUp';
 import multipleChat from './src/screens/multipleChat';
 import viewHealth from './src/screens/viewHealth';
-import register from './src/screens/register'
-import WebViewScreen from './src/screens/webView'
+import register from './src/screens/register';
+import WebViewScreen from './src/screens/webView';
 
-import auth from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth';
 
-import { PersistGate } from 'redux-persist/lib/integration/react'
-import { Provider } from 'react-redux'
-import { store, persistor } from './src/redux'
-import { connect } from 'react-redux'
+import {PersistGate} from 'redux-persist/lib/integration/react';
+import {Provider} from 'react-redux';
+import {store, persistor} from './src/redux';
+import {connect} from 'react-redux';
 
 const HomeStack = createNativeStackNavigator();
-const ChatStack = createNativeStackNavigator()
-const AuthStack = createNativeStackNavigator()
-const Stack = createNativeStackNavigator()
+const ChatStack = createNativeStackNavigator();
+const AuthStack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-var subscriber
+var subscriber;
 
 // function AuthStackScreen() {
 //   return (
@@ -126,99 +127,100 @@ var subscriber
 // }
 
 export default function App() {
-
   return (
-    <Provider store={store} >
-      <PersistGate persistor={persistor} >
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
         <ConnectedIntermediateComponent />
       </PersistGate>
     </Provider>
-
-  )
-
+  );
 }
 
 class Intermediate extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-
       user: 0,
-      signUpDone: false
-
-    }
+      signUpDone: false,
+    };
   }
 
   onAuthStateChanged = (user) => {
-    this.setState({ user: user })
+    this.setState({user: user});
     // this.setState({ user: 1 })
-  }
+  };
 
   async componentDidMount() {
     subscriber = auth().onAuthStateChanged(this.onAuthStateChanged);
   }
 
   componentWillUnmount() {
-    subscriber()
+    subscriber();
   }
 
   AuthStackScreen = () => {
-    return ( 
-      <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+    return (
+      <AuthStack.Navigator screenOptions={{headerShown: false}}>
         <AuthStack.Screen name="Login" component={login} />
         <AuthStack.Screen name="SignUp" component={signUp} />
       </AuthStack.Navigator>
-    )
-  }
-  
+    );
+  };
+
   HomeStackScreen = () => {
     return (
-      <HomeStack.Navigator screenOptions={{ headerShown: false }}>
-        <HomeStack.Screen name="Sessions" component={homeScreen} initialParams={{ registered: false }} />
+      <HomeStack.Navigator screenOptions={{headerShown: true}}>
+        <HomeStack.Screen
+          name="Sessions"
+          component={homeScreen}
+          initialParams={{registered: false}}
+        />
         <HomeStack.Screen name="TrainerProfile" component={trainerProfile} />
-        <HomeStack.Screen name="ViewParticipants" component={viewParticipants} />
+        <HomeStack.Screen
+          name="ViewParticipants"
+          component={viewParticipants}
+        />
+        <HomeStack.Screen name="Notifications" component={notifications} />
         <HomeStack.Screen name="ViewHealth" component={viewHealth} />
         <HomeStack.Screen name="WebView" component={WebViewScreen} />
       </HomeStack.Navigator>
     );
-  }
-  
+  };
+
   ChatStackScreen = () => {
     return (
-      <ChatStack.Navigator screenOptions={{ headerShown: false }}>
+      <ChatStack.Navigator screenOptions={{headerShown: false}}>
         <ChatStack.Screen name="MultipleChat" component={multipleChat} />
         <ChatStack.Screen name="ChatHome" component={chatScreen} />
       </ChatStack.Navigator>
-    )
-  }
-  
+    );
+  };
+
   ChatStackNoScreen = () => {
     return (
-      <ChatStack.Navigator screenOptions={{ headerShown: false }}>
+      <ChatStack.Navigator screenOptions={{headerShown: false}}>
         <ChatStack.Screen name="ChatNone" component={noChatScreen} />
       </ChatStack.Navigator>
-    )
-  }
-  
+    );
+  };
+
   ChatStackOneScreen = () => {
     return (
-      <ChatStack.Navigator screenOptions={{ headerShown: false, }}>
+      <ChatStack.Navigator screenOptions={{headerShown: false}}>
         <ChatStack.Screen name="ChatHome" component={chatScreen} />
       </ChatStack.Navigator>
-    )
-  }
-  
-  
+    );
+  };
+
   TabStackScreen = () => {
     return (
       <Tab.Navigator
         initialRouteName="Home"
-        screenOptions={{ headerShown: false, }}
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+        screenOptions={{headerShown: false}}
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
             let iconName;
-  
+
             if (route.name === 'Home') {
               iconName = focused ? 'homeSelected' : 'home';
             } else if (route.name === 'Profile') {
@@ -226,7 +228,7 @@ class Intermediate extends Component {
             } else if (route.name === 'Chat') {
               iconName = focused ? 'chatSelected' : 'chat';
             }
-  
+
             return <NavigationSvg name={iconName} />;
           },
         })}
@@ -241,29 +243,56 @@ class Intermediate extends Component {
           activeTintColor: Colors.gradientLeft,
           inactiveTintColor: Colors.textPlaceholder,
           keyboardHidesTabBar: true,
-        }}
-      >
-        {this.props.user.user.sessions.length === 0 && <Tab.Screen name="Chat" component={this.ChatStackNoScreen}  />}
-        {this.props.user.user.sessions.length === 1 && !this.props.user.user.isTrainer && <Tab.Screen name="Chat" component={this.ChatStackOneScreen} options={{ tabBarBadge: this.props.user.unread > 0 ? this.props.user.unread : null, tabBarBadgeStyle: { backgroundColor: Colors.gradientRight } }} />}
-        {(this.props.user.user.isTrainer || this.props.user.user.sessions.length > 1) && <Tab.Screen name="Chat" component={this.ChatStackScreen} options={{ tabBarBadge: this.props.user.unread > 0 ? this.props.user.unread : null, tabBarBadgeStyle: { backgroundColor: Colors.gradientRight } }} />}
+        }}>
+        {this.props.user.user.sessions.length === 0 && (
+          <Tab.Screen name="Chat" component={this.ChatStackNoScreen} />
+        )}
+        {this.props.user.user.sessions.length === 1 &&
+          !this.props.user.user.isTrainer && (
+            <Tab.Screen
+              name="Chat"
+              component={this.ChatStackOneScreen}
+              options={{
+                tabBarBadge:
+                  this.props.user.unread > 0 ? this.props.user.unread : null,
+                tabBarBadgeStyle: {backgroundColor: Colors.gradientRight},
+              }}
+            />
+          )}
+        {(this.props.user.user.isTrainer ||
+          this.props.user.user.sessions.length > 1) && (
+          <Tab.Screen
+            name="Chat"
+            component={this.ChatStackScreen}
+            options={{
+              tabBarBadge:
+                this.props.user.unread > 0 ? this.props.user.unread : null,
+              tabBarBadgeStyle: {backgroundColor: Colors.gradientRight},
+            }}
+          />
+        )}
         <Tab.Screen name="Home" component={this.HomeStackScreen} />
         <Tab.Screen name="Profile" component={profileScreen} />
       </Tab.Navigator>
-    )
-  }
+    );
+  };
 
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} >
-          {this.state.user === 0 ? (<Stack.Screen name="Loading" component={LoadAuth} />)
-            : this.state.user === null ? (<Stack.Screen name="Auth" component={this.AuthStackScreen} />)
-              : !this.props.user.signUp ? (<Stack.Screen name="Register" component={register} />)
-                : (<Stack.Screen name="HomeNav" component={this.TabStackScreen} />)
-          }
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          {this.state.user === 0 ? (
+            <Stack.Screen name="Loading" component={LoadAuth} />
+          ) : this.state.user === null ? (
+            <Stack.Screen name="Auth" component={this.AuthStackScreen} />
+          ) : !this.props.user.signUp ? (
+            <Stack.Screen name="Register" component={register} />
+          ) : (
+            <Stack.Screen name="HomeNav" component={this.TabStackScreen} />
+          )}
         </Stack.Navigator>
       </NavigationContainer>
-    )
+    );
   }
 
   // render() {
@@ -338,13 +367,12 @@ class Intermediate extends Component {
   //     </NavigationContainer>
   //   );
   // }
-
 }
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    user: state.user,
   };
 }
 
-const ConnectedIntermediateComponent = connect(mapStateToProps)(Intermediate)
+const ConnectedIntermediateComponent = connect(mapStateToProps)(Intermediate);

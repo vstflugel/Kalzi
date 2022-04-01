@@ -18,7 +18,7 @@ import storage from '@react-native-firebase/storage'
 import Toast from 'react-native-simple-toast';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
+import {  Picker} from "react-native";
 
 import { connect } from 'react-redux'
 
@@ -353,7 +353,7 @@ class home extends Component {
           <View style={{ marginBottom: 25, flexDirection: 'row', marginHorizontal: 10, backgroundColor: Colors.boxBackground, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, }}>
             <View style={{ marginLeft: 10, justifyContent: 'space-between', flex: 1, alignItems: 'center', flexDirection: 'row' }} >
               <Text style={{ color: Colors.textPlaceholder, fontWeight: 'bold', fontSize: 20, alignSelf: 'center', }}>Activity</Text>
-              <TextInput
+              {/* <TextInput
                 defaultValue={this.state.activity}
                 placeholder='How active are you?'
                 placeholderTextColor={Colors.textPlaceholder}
@@ -361,20 +361,20 @@ class home extends Component {
                 textAlign='center'
                 // value={this.state.activity}
                 style={{ color: Colors.white }}
-              />
-              {/* <Picker
+              /> */}
+              <Picker
               dropdownIconColor={Colors.white}
               mode='dropdown'
-              // itemStyle={{color: Colors.white}}
-              style={{color: Colors.white , borderColor: 'red', borderWidth: 1 , flex:1 , borderRadius: 5}}
+              itemStyle={{color: Colors.white}}
+              style={{color: Colors.white , borderColor: 'black', borderWidth: 1 , flex:1 , borderRadius: 5}}
               selectedValue={'sedentary'}
               onValueChange={(itemValue, itemIndex) =>
                 this.setState({activity: itemValue})
               }>
-              <Picker.Item color={Colors.white} label="Sedentary" value="sedentary" />
-              <Picker.Item  color={Colors.white}label="Somewhat" value="somewhat" />
-              <Picker.Item color={Colors.white} label="Very active" value="very active" />
-            </Picker> */}
+              <Picker.Item color={Colors.backgroundColor} label="                Sedentary" value="sedentary" />
+              <Picker.Item  color={Colors.backgroundColor}label="                   Active" value="Active" />
+              <Picker.Item color={Colors.backgroundColor} label="              Very active" value="Very active" />
+            </Picker>
             </View>
           </View>
 

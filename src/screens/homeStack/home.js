@@ -9,7 +9,6 @@ import firestore from '@react-native-firebase/firestore'
 import Carousel from 'react-native-snap-carousel';
 import DefaultLoader from '../../components/defaultLoader'
 import InfoPopup from '../../components/infoPopup'
-import Icon from 'react-native-vector-icons/Entypo'
 import Toast from 'react-native-simple-toast';
 const base64 = require('base-64')
 import RazorpayCheckout from 'react-native-razorpay'
@@ -31,8 +30,7 @@ class home extends Component {
       errorMessage: '',
       errorModalVisible: false,
       firstSessions: false,
-      iosPermission: false,
-      isGroup: true
+      iosPermission: false
     };
   }
 
@@ -199,7 +197,7 @@ class home extends Component {
 
     }
     else if (this.props.user.user.sessions.length > 0 && !this.props.user.user.isTrainer) {
-
+    
       await this.getSessions(this.props.user.user.sessions)
 
     }
@@ -236,15 +234,15 @@ class home extends Component {
     }
 
     if (Platform.OS === 'android' || (Platform.OS === 'ios' && this.state.iosPermission)) {
-      var token = await messaging().getToken()
+    var token = await messaging().getToken()
 
-      messaging().subscribeToTopic("all").catch()
+    messaging().subscribeToTopic("all").catch()
 
-      if (token !== this.props.user.user.token) {
-        firestore().collection('users').doc(uid).update({
-          token: token
-        })
-      }
+    if (token !== this.props.user.user.token) {
+      firestore().collection('users').doc(uid).update({
+        token: token
+      })
+    }
     }
 
     this.props.dispatch({
@@ -502,62 +500,7 @@ class home extends Component {
                       <Text style={styles.text}>Hey, </Text>
                       <Text style={styles.username}>{this.props.user.user.name} </Text>
                     </View>
-                    <ImageIcon source={{ uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35} />
-                  </View>
-                  <View style={{ flexDirection: "row" }} width={200}>
-
-                    {this.props.user.user.isTrainer &&
-
-                      <View style={{ marginBottom: 30, marginLeft: 12, flexDirection: "row", alignItems: "center" }} >
-
-
-
-
-                        <GradientButton flex={10} flexDirection={"column"} height={40} width={screenWidth * 0.37} borderRadius={15} text='Group'
-                          onPress={() => {
-                            this.setState({ isGroup: true });
-
-                          }}
-
-
-                        />
-
-
-
-                      </View>
-                    }
-
-                    {this.props.user.user.isTrainer &&
-
-                      <View style={{ flex: 0.9 }} >
-                        <GradientButton height={40} width={screenWidth * 0.37} borderRadius={15} text='Personal'
-                          onPress={() => {
-                            this.setState({ isGroup: false });
-
-
-                          }}
-
-
-                        />
-
-
-
-
-
-
-
-
-
-
-
-                      </View>
-
-                    }
-
-
-
-
-
+                    <ImageIcon source={{ uri: this.props.user.user.photoUrl }} height={70} width={70} borderRadius={35}  onPress={this.props.navigation.navigate('Notifications')}/>
                   </View>
                   <View style={{ alignItems: 'center' }} >
                   </View>
@@ -596,122 +539,83 @@ class home extends Component {
                     }
                   }
                   return (
-                    <View style={{ flex: 1, alignItems: 'center' }} >
-
-
-                      {this.state.isGroup == true ? (<React.Fragment>
-                        <ScrollView
-                          horizontal={true}
-                        >
-
-
-                          <View style={{ marginTop: 25, width: screenWidth * 0.63, backgroundColor: Colors.boxBackground, paddingVertical: 20, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 20, alignItems: 'center' }}>
-                            <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 25 }}>{this.props.user.sessions[item].title}</Text>
-                            {!this.props.user.user.isTrainer && <Text style={{ color: Colors.gradientLeft, fontWeight: 'bold', fontSize: 15 }}>{this.props.user.sessions[item].trainerName} <Text style={{ color: Colors.gradientRight, fontWeight: 'bold', fontSize: 15 }}>{this.props.user.sessions[item].category}</Text></Text>}
-                            {this.props.user.user.isTrainer && <Text style={{ color: Colors.gradientLeft, fontWeight: 'bold', fontSize: 15 }}>{this.props.user.sessions[item].category}</Text>}
-                            <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15, marginTop: 10, marginBottom: 10 }}>⏲️ Time: {dt}</Text>
-                            <Weekdays width={screenWidth * 0.63} activeDay={this.props.user.sessions[item].activeDay} style={{ alignSelf: 'center', width: screenWidth * 0.63 }} />
-                            <View style={{ backgroundColor: Colors.background, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 10, marginVertical: 20 }}>
-                              {!this.props.user.user.isTrainer && <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 20 }}>Expires in <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15 }}> {left} days</Text></Text>}
-                              {this.props.user.user.isTrainer &&
-                                <TouchableOpacity onPress={() => {
-                                  this.props.navigation.navigate('ViewParticipants', {
-                                    id: item, activeDay: this.props.user.sessions[item].activeDay,
-                                    title: this.props.user.sessions[item].title,
-                                    time: `⏲️ Time: ${dt}`,
-                                    category: this.props.user.sessions[item].title
-                                  })
-                                }} >
-                                  <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 20 }}>🧘🏽 <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15 }}>View Participants</Text></Text>
-                                </TouchableOpacity>
+                    <View style={{flex: 1, alignItems: 'center'}} >
+                      <View style={{ marginTop: 25, width: screenWidth * 0.63, backgroundColor: Colors.boxBackground, paddingVertical: 20, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 20, alignItems: 'center' }}>
+                        <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 25 }}>{this.props.user.sessions[item].title}</Text>
+                        {!this.props.user.user.isTrainer && <Text style={{ color: Colors.gradientLeft, fontWeight: 'bold', fontSize: 15 }}>{this.props.user.sessions[item].trainerName} <Text style={{ color: Colors.gradientRight, fontWeight: 'bold', fontSize: 15 }}>{this.props.user.sessions[item].category}</Text></Text>}
+                        {this.props.user.user.isTrainer && <Text style={{ color: Colors.gradientLeft, fontWeight: 'bold', fontSize: 15 }}>{this.props.user.sessions[item].category}</Text>}
+                        <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15, marginTop: 10, marginBottom: 10 }}>⏲️ Time: {dt}</Text>
+                        <Weekdays width={screenWidth * 0.63} activeDay={this.props.user.sessions[item].activeDay} style={{ alignSelf: 'center', width: screenWidth * 0.63 }} />
+                        <View style={{ backgroundColor: Colors.background, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 10, marginVertical: 20 }}>
+                          {!this.props.user.user.isTrainer && <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 20 }}>Expires in <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15 }}> {left} days</Text></Text>}
+                          {this.props.user.user.isTrainer &&
+                            <TouchableOpacity onPress={() => {
+                              this.props.navigation.navigate('ViewParticipants', {
+                                id: item, activeDay: this.props.user.sessions[item].activeDay,
+                                title: this.props.user.sessions[item].title,
+                                time: `⏲️ Time: ${dt}`,
+                                category: this.props.user.sessions[item].title
+                              })
+                            }} >
+                              <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 20 }}>🧘🏽 <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15 }}>View Participants</Text></Text>
+                            </TouchableOpacity>
+                          }
+                        </View>
+                        
+                        {!this.props.user.user.isTrainer && expiry &&
+                          <TouchableOpacity
+                            onPress={async () => {
+                              // console.log("YESH")
+                              await this.renewSession(
+                                this.props.user.sessions[item].currency,
+                                this.props.user.sessions[item].cost,
+                                this.props.user.sessions[item].title,
+                                item,
+                                this.props.user.sessions[item].trainer,
+                                this.props.user.sessions[item].linkedAccount,
+                                this.props.user.sessions[item].transferRatio
+                              )
+                            }}
+                          >
+                            <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15, alignSelf: 'center', marginBottom: 10 }}>
+                              ⚠️ Click Here to Renew
+                            </Text>
+                          </TouchableOpacity>
+                        }
+                        <GradientButton
+                          height={40}
+                          width="95%"
+                          borderRadius={20}
+                          onPress={async () => {
+                            try {
+                              // console.log("URL", this.props.user.sessions[item].zoomUrl)
+                              var supported = await Linking.canOpenURL(this.props.user.sessions[item].zoomUrl)
+                              if (supported) {
+                                Linking.openURL(this.props.user.sessions[item].zoomUrl)
                               }
-                            </View>
-                            {!this.props.user.user.isTrainer && expiry &&
-                              <TouchableOpacity
-                                onPress={async () => {
-                                  // console.log("YESH")
-                                  await this.renewSession(
-                                    this.props.user.sessions[item].currency,
-                                    this.props.user.sessions[item].cost,
-                                    this.props.user.sessions[item].title,
-                                    item,
-                                    this.props.user.sessions[item].trainer,
-                                    this.props.user.sessions[item].linkedAccount,
-                                    this.props.user.sessions[item].transferRatio
-                                  )
-                                }}
-                              >
-                                <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 15, alignSelf: 'center', marginBottom: 10 }}>
-                                  ⚠️ Click Here to Renew
-                                </Text>
-                              </TouchableOpacity>
+                              else {
+                                this.setState({ errorTitle: 'Whoops', errorMessage: `Don't know how to open this URL`, errorModalVisible: true })
+                              }
+                            } catch (error) {
+                              console.log("ERROR", error)
+                              this.setState({ errorTitle: 'Success', errorMessage: `Attendance marked`, errorModalVisible: true })
                             }
-                            <GradientButton
-                              height={40}
-                              width="95%"
-                              borderRadius={20}
-                              onPress={async () => {
-                                try {
-                                  // console.log("URL", this.props.user.sessions[item].zoomUrl)
-                                  var supported = await Linking.canOpenURL(this.props.user.sessions[item].zoomUrl)
-                                  if (supported) {
-                                    Linking.openURL(this.props.user.sessions[item].zoomUrl)
-                                  }
-                                  else {
-                                    this.setState({ errorTitle: 'Whoops', errorMessage: `Don't know how to open this URL`, errorModalVisible: true })
-                                  }
-                                } catch (error) {
-                                  console.log("ERROR", error)
-                                  this.setState({ errorTitle: 'Success', errorMessage: `Attendance marked`, errorModalVisible: true })
-                                }
-                              }}
-                              text="START"
-                            />
-                            {/* <View style={{marginTop: 15 , flex: 1}} > */}
-                            <GradientButton
-                              height={40}
-                              width="95%"
-                              borderRadius={20}
-                              onPress={() => {
-                                this.props.navigation.navigate('WebView', { url: this.props.user.sessions[item].instructionUrl })
-                              }}
-                              text="MORE INFO"
-                              style={{ marginTop: 20 }}
-                              border={true}
-                            />
-                          </View>
-                        </ScrollView>
-                      </React.Fragment>
-                      ) : (
-
-                        <React.Fragment>
-                          <View style={{ marginBottom: 15, flexDirection: 'row', marginHorizontal: 10, backgroundColor: 'black', paddingHorizontal: 10, paddingVertical: 10, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 20, }}>
-                            <ImageIcon onPress={this.props.onPress} source={{ uri: item.photoUrl }} height={45} width={45} borderRadius={22.5} />
-                            {/*{item.injury === '' && <Text style={{ color: 'green', fontWeight: 'bold', alignSelf: 'center', marginLeft: 35, fontSize: 25, flex: 3 }}>Name 1</Text>}
-                          {item.injury !== '' && <Text style={{ color: 'red', fontWeight: 'bold', alignSelf: 'center', marginLeft: 35, fontSize: 25, flex: 3 }}>Name 1</Text>}*/}
-                            {<Text style={{ color: 'green', fontWeight: 'bold', alignSelf: 'center', marginLeft: 35, fontSize: 25, flex: 3 }}>Name 1</Text>}
-                            <Icon size={20} name='chevron-thin-right' style={{ alignSelf: 'center', marginRight: 20 }} color={Colors.textPlaceholder} />
-
-
-
-                          </View>
-
-                          <View style={{ marginBottom: 15, flexDirection: 'row', marginHorizontal: 10, backgroundColor: 'black', paddingHorizontal: 10, paddingVertical: 10, borderColor: Colors.boxBorder, borderWidth: 2, borderRadius: 20, }}>
-                            <ImageIcon onPress={this.props.onPress} source={{ uri: item.photoUrl }} height={45} width={45} borderRadius={22.5} />
-                            {/*{item.injury === '' && <Text style={{ color: 'green', fontWeight: 'bold', alignSelf: 'center', marginLeft: 35, fontSize: 25, flex: 3 }}>Name 2</Text>}
-                          {item.injury !== '' && <Text style={{ color: 'red', fontWeight: 'bold', alignSelf: 'center', marginLeft: 35, fontSize: 25, flex: 3 }}>Name 2</Text>}*/}
-                            {<Text style={{ color: 'green', fontWeight: 'bold', alignSelf: 'center', marginLeft: 35, fontSize: 25, flex: 3 }}>Name 2</Text>}
-                            <Icon size={20} name='chevron-thin-right' style={{ alignSelf: 'center', marginRight: 20 }} color={Colors.textPlaceholder} />
-
-
-
-                          </View>
-                        </React.Fragment>
-
-                      )
-                      }
-
-
+                          }}
+                          text="START"
+                        />
+                        {/* <View style={{marginTop: 15 , flex: 1}} > */}
+                        <GradientButton
+                          height={40}
+                          width="95%"
+                          borderRadius={20}
+                          onPress={() => {
+                            this.props.navigation.navigate('WebView', { url: this.props.user.sessions[item].instructionUrl })
+                          }}
+                          text="MORE INFO"
+                          style={{ marginTop: 20 }}
+                          border={true}
+                        />
+                      </View>
                     </View>
                   )
                 }
