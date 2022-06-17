@@ -12,9 +12,6 @@ Going through pilot stage with around 50 people and continously iterating - the 
 3. Invite your friends to join the session.
 4. View participants, etc.
 
-## Created By: 
-
-[Aryaman Shrey](https://github.com/arya-man)
 
 ## Download Links
 
